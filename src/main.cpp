@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <WiFiManager.h>
 #include <ArduinoMqttClient.h>
 #include <RCSwitch.h>
 #include <ArduinoOTA.h>
@@ -12,10 +13,8 @@
 #define DEBUG_SPRINTF \
   if (DEBUG) sprintf
 
-char ssid[] = "ourWifi";
-char pass[] = "7cuuyppc";
-
 WiFiClient wifiClient;
+WiFiManager wm;
 MqttClient mqttClient(wifiClient);
 
 const char broker[] = "10.0.1.171";
@@ -122,34 +121,39 @@ Ticker toggleOnOffTicker(toggleOnOff, 2000, 0, MILLIS);
 
 void setup()
 {
-    DEBUG_SERIAL.begin(115200);
-
-    // Connect to Wifi...
-    WiFi.begin("ourWifi", "7cuuyppc");
-    uint32_t notConnectedCounter = 0;
-    while (WiFi.status() != WL_CONNECTED)
+    if (DEBUG)
     {
-        delay(100);
-        DEBUG_SERIAL.println("Wifi connecting...");
-        notConnectedCounter++;
-        if(notConnectedCounter > 150)
-        { // Reset board if not connected after 5s...
-            DEBUG_SERIAL.println("Resetting due to Wifi not connecting...");
-            ESP.restart();
-        }
+        Serial.begin(115200);
+        while (!Serial) delay(100);
     }
+
+    // try to connect to wifi...
+    if (!wm.autoConnect())
+    {
+        DEBUG_SERIAL.println("WiFi not connected");
+        // try to start the portal...
+        if (!wm.startConfigPortal())
+            DEBUG_SERIAL.println("Failed to start portal");
+    }
+
     DEBUG_SERIAL.print("Wifi connected, IP address: ");
     DEBUG_SERIAL.println(WiFi.localIP());
 
     DEBUG_SERIAL.print("Attempting to connect to the MQTT broker: ");
     DEBUG_SERIAL.println(broker);
     
-    if (!mqttClient.connect(broker, port))
+    short notConnectedCounter = 0;
+    while (!mqttClient.connect(broker, port))
     {
         DEBUG_SERIAL.print("MQTT connection failed! Error code = ");
         DEBUG_SERIAL.println(mqttClient.connectError());
-        
-        while (1);
+        delay(1000);
+        notConnectedCounter++;
+        if(notConnectedCounter > 20)
+        {   // Reset board if not connected after 20s...
+            DEBUG_SERIAL.println("Resetting due to MQTT not connecting...");
+            ESP.restart();
+        }
     }
     
     DEBUG_SERIAL.println("Connected to MQTT broker");
