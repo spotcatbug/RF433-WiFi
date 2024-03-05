@@ -9,6 +9,9 @@ This project is still *very* rudimentary. For example, I've hard-coded the IP of
 
 One important note: there is no way for the on/off state of the outlet(s) to be reported back to the Arduino. Home Assistant does an OK job of showing *some* state for the devices, but it can get out of sync (showing off state when on, or vice versa.) You can still turn on an outlet that's already on (or turn off one that's already off) so the sync is easy to fix. This is to say this is really only cosmetic in the Home Assitant interface when the outlets are turned on or off *not* through Home Assistant. Home Assistant keeps track of when *it* turns outlets on or off, but it can't know about other reasons ways the outlets might have been turned on or off.
 
+## Building the software
+The arduino project is a PlatformIO, VS Code project. After installing the PlatformIO plug-in in VS Code, you should be able to open the cloned repo folder in VS Code and build it. Then you can upload to the arduino. The project is hard-coded for a D1 mini.
+
 ## Hardware
 Here are the devices I'm using. I happened to buy these on Amazon, so linking to Amazon is the easiest way for me to show them here. These are not affliate links.
 
@@ -17,6 +20,8 @@ Here are the devices I'm using. I happened to buy these on Amazon, so linking to
 [NodeMCU WeMos D1 Mini](https://a.co/d/5vs8sCT) : This is the ESP8266 module I use. It's nice and small.
 
 [433 MHz Transmitter and Receiver](https://a.co/d/fXiLwbL) : The receiver is only connected and used when snooping the remote codes. I would like to update this so that the receiver is always connected and ready to figure out the signals from the remotes.
+
+Diagrams for how to wire everything up are needed. For now (sorry), pin wiring needs to be inferred from the source code.
 
 ## 3D-Printed Case
 I designed a 3D-printable case for this thing in Fusion 360. This was back when I was still learning about 3D-printing and Fusion. I've included the Fusion 360 file in this project. It's a binary blob (I don't know of a better way to put a Fusion file into a git repo). The case is two colors, printed as two separate objects that are then joined together. I definitely wouldn't make the case this way today, but I'm including it anyway.
