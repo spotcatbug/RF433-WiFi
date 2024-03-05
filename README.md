@@ -10,7 +10,7 @@ This project is still *very* rudimentary. For example, I've hard-coded the IP of
 One important note: there is no way for the on/off state of the outlet(s) to be reported back to the Arduino. Home Assistant does an OK job of showing *some* state for the devices, but it can get out of sync (showing off state when on, or vice versa.) You can still turn on an outlet that's already on (or turn off one that's already off) so the sync is easy to fix. This is to say this is really only cosmetic in the Home Assitant interface when the outlets are turned on or off *not* through Home Assistant. Home Assistant keeps track of when *it* turns outlets on or off, but it can't know about other reasons ways the outlets might have been turned on or off.
 
 ## Building the software
-The arduino project is a PlatformIO, VS Code project. After installing the PlatformIO plug-in in VS Code, you should be able to open the cloned repo folder in VS Code and build it. Then you can upload to the arduino. The project is hard-coded for a D1 mini.
+The arduino project is a PlatformIO, VS Code project. After installing the PlatformIO plug-in in VS Code, you should be able to open the cloned repo folder in VS Code and build it. Then you can upload to the arduino. The PlatformIO INI has a few entries in it for different deployments, including over-the-air deployments (you need to start with USB, though.) Unfortunately, the OTA deployments have hard-coded IP's (hey, I said I wanted to MAKE this good, not that it IS good.) This is something that should be fixed (somehow.)
 
 ## Hardware
 Here are the devices I'm using. I happened to buy these on Amazon, so linking to Amazon is the easiest way for me to show them here. These are not affliate links.
